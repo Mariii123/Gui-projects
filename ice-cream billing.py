@@ -27,12 +27,10 @@ rf2=Frame(rf,width=600,height=450,relief="raise",bd=6)
 rf2.pack(side=TOP)
 rf3=Frame(rf,width=600,height=150,relief="raise",bd=6)
 rf3.pack(side=TOP)
-
 title=Label(tf,font=("arial",40,"bold"),fg="blue",text="     Ice Cream Billing system     ")
 title.pack()
 #-====================Functions===================================
 def reciept():
-    txt.configure(state='normal')
     txt.insert(END,"Chocobar \t \t" +str(var1.get())+"\n ")
     txt.insert(END,"Vanilla \t \t" +str(var2.get())+" \n")
     txt.insert(END,"Strawberry \t \t" +str(var3.get())+" \n")
@@ -50,9 +48,11 @@ def reciept():
 def total():
     subtot=var1.get()*10+var2.get()*20+var3.get()*20+var4.get()*30+var5.get()*15+var6.get()*75+var7.get()*50+var8.get()*40+var9.get()*30+var10.get()*35
     var11.set(subtot)
+    tax=var1.get()*10*0.05+var2.get()*20*0.05+var3.get()*2*0.050+var4.get()*3*0.050+var5.get()*15*0.05+var6.get()*75*0.05+var7.get()*50*0.05+var8.get()*40*0.05+var9.get()*30*0.05+var10.get()*35*0.05
+    var13.set(tax)
     sc=subtot/10
     var12.set(sc)
-    tot=var1.get()*10+var2.get()*20+var3.get()*20+var4.get()*30+var5.get()*15+var6.get()*75+var7.get()*50+var8.get()*40+var9.get()*30+var10.get()*35
+    tot=subtot+tax+sc
     var14.set(tot)
 def quit():
     e=messagebox.askyesno("Billing System","Do you want to exit")
@@ -167,6 +167,6 @@ b2=Button(rf3,text="Receipt",font=("arial",15,'bold'),fg="red",command=reciept)
 b2.grid(row=0,column=1)
 b3=Button(rf3,text="Reset",font=("arial",15,'bold'),fg="red",command=reset)
 b3.grid(row=0,column=2)
-b4=Button(rf3,text="Quit",font=("arial",15,'bold'),fg="red")
+b4=Button(rf3,text="Quit",font=("arial",15,'bold'),fg="red",command=quit)
 b4.grid(row=0,column=3)
 root.mainloop()
