@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+import random,time
 root=Tk()
 root.title("Ice Cream Billing system")
 root.geometry("1200x800+0+0")
@@ -31,26 +32,32 @@ title=Label(tf,font=("arial",40,"bold"),fg="blue",text="     Ice Cream Billing s
 title.pack()
 #-====================Functions===================================
 def reciept():
-    txt.insert(END,"Chocobar \t \t" +str(var1.get())+"\n ")
-    txt.insert(END,"Vanilla \t \t" +str(var2.get())+" \n")
-    txt.insert(END,"Strawberry \t \t" +str(var3.get())+" \n")
-    txt.insert(END,"Butterscotch\t \t" +str(var4.get())+" \n")
-    txt.insert(END,"kulfi \t \t" +str(var5.get())+"\n ")
-    txt.insert(END,"Ice cream cake \t \t" +str(var6.get()) +"\n ")
-    txt.insert(END,"Mint Ice cream \t \t" +str(var7.get())+"\n ")
-    txt.insert(END,"Cone ice \t \t" +str(var8.get())+"\n ")
-    txt.insert(END,"Cup ice \t \t" +str(var9.get())+"\n")
-    txt.insert(END,"Mango bar \t \t" +str(var10.get())+"\n ")
-    txt.insert(END,"Sub total \t \t" +str(var11.get())+"\n ")
-    txt.insert(END,"Service charge \t \t" +str(var12.get())+"\n")
-    txt.insert(END,"Tax \t \t" +str(var13.get())+"\n ")
-    txt.insert(END,"Total cost \t \t" +str(var14.get())+"\n ")
+    txt.configure(state='normal')
+    txt.insert("1.0","\t A-Z IceCream \t \n ")
+    txt.insert(END,"--------------------------------------------- \n")
+    txt.insert(END,"Bill no. \t \t" +str(eval("random.randrange(11111,99999)"))+"\n \n")
+    txt.insert(END,"Chocobar \t \t" +str(var1.get())+"\n \n")
+    txt.insert(END,"Strawberry \t \t" +str(var2.get())+" \n  \n")
+    txt.insert(END,"Vanilla \t \t" +str(var3.get())+" \n \n")
+    txt.insert(END,"Butterscotch\t \t" +str(var4.get())+" \n \n")
+    txt.insert(END,"Kulfi \t \t" +str(var5.get())+"\n \n")
+    txt.insert(END,"Ice cream cake \t \t" +str(var6.get()) +"\n \n")
+    txt.insert(END,"Mint Ice cream \t \t" +str(var7.get())+"\n \n")
+    txt.insert(END,"Cone ice \t \t" +str(var8.get())+"\n \n")
+    txt.insert(END,"Cup ice \t \t" +str(var9.get())+"\n \n")
+    txt.insert(END,"Mango bar \t \t" +str(var10.get())+"\n \n")
+    txt.insert(END,"------------------------------------ \n \n")
+    txt.insert(END,"Sub total \t \t" +str(var11.get())+"\n \n")
+    txt.insert(END,"Service charge \t \t" +str(var12.get())+"\n \n")
+    txt.insert(END,"Tax \t \t" +str(var13.get())+"\n \n")
+    txt.insert(END,"Total cost \t \t" +str(var14.get())+"\n \n")
+    txt.configure(state='disabled')
 def total():
     subtot=var1.get()*10+var2.get()*20+var3.get()*20+var4.get()*30+var5.get()*15+var6.get()*75+var7.get()*50+var8.get()*40+var9.get()*30+var10.get()*35
     var11.set(subtot)
     tax=var1.get()*10*0.05+var2.get()*20*0.05+var3.get()*2*0.050+var4.get()*3*0.050+var5.get()*15*0.05+var6.get()*75*0.05+var7.get()*50*0.05+var8.get()*40*0.05+var9.get()*30*0.05+var10.get()*35*0.05
     var13.set(tax)
-    sc=subtot/10
+    sc=round(subtot*0.06,2)
     var12.set(sc)
     tot=subtot+tax+sc
     var14.set(tot)
@@ -59,6 +66,7 @@ def quit():
     if e>0:
         root.destroy()
 def reset():
+    txt.configure(state='normal')
     var1.set("0")
     var2.set("0")
     var3.set("0")
@@ -74,6 +82,7 @@ def reset():
     var13.set("0.0")
     var14.set("0.0")
     txt.delete("1.0",END)
+    txt.configure(state='disabled')
 #===================Labels======================================
 l1=Label(lf1a,text="Chocobar",font=('arial',20,'bold'),fg='chocolate')
 l1.grid(row=0,column=0,padx=10,pady=10,sticky=W)
@@ -160,6 +169,10 @@ e14.grid(row=1,column=1,sticky=E,padx=10,pady=10)
 #=================Textbox=================
 txt=Text(rf2,font=('arial',15,'bold'),fg="blue4",width=30,height=15)
 txt.grid(row=0,column=0)
+s=Scrollbar(rf2)
+s.grid(row=0,column=1,ipady=15)
+s.config(command=txt.yview)
+txt.configure(state='disabled',yscrollcommand=s.set)
 #=================buttons====================
 b1=Button(rf3,text="Total",font=("arial",15,'bold'),fg="red",command=total)
 b1.grid(row=0,column=0)
