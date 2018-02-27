@@ -3,7 +3,7 @@ import tkinter.messagebox as messagebox
 import random,time,sqlite3
 import time
 counter=1
-conn=sqlite3.connect('database.db')
+conn=sqlite3.connect('prodatabase.db')
 c=conn.cursor()
 root=Tk()
 root.title("Ice Cream Billing System")
@@ -14,6 +14,7 @@ qimg=PhotoImage(file="close.png")
 himg=PhotoImage(file="home.png")
 bimg=PhotoImage(file="bill.png")
 seimg=PhotoImage(file='search.png')
+root.iconbitmap('logo.png')
 def bills():
    root.withdraw()
    billing=Toplevel()
@@ -39,90 +40,97 @@ def bills():
    rf2.place(x=0,y=50)
    rf3=Frame(rf,width=400,height=250,relief="ridge",bd=10)
    rf3.place(x=0,y=520)
-   def bnogen():
-      b=random.randint(10000,99999)
-      return b
    def create_table():
-       c.execute("CREATE TABLE IF NOT EXISTS data(bill_no TEXT,chocobar INTEGER,strawberry INTEGER,vanilla INTEGER,butterscotch INTEGER,kulfi INTEGER,ice_cream_cake INTEGER,mint_ice INTEGER,cone_ice INTEGER,cup_ice INTEGER,mango_bar INTEGER,sub_total INTEGER,service_charge REAL,tax REAL,amount REAL)")
+       c.execute("CREATE TABLE IF NOT EXISTS bdata(bill_no INTEGER,chocobar INTEGER,strawberry INTEGER,vanilla INTEGER,butterscotch INTEGER,kulfi INTEGER,ice_cream_cake INTEGER,mint_ice INTEGER,cone_ice INTEGER,cup_ice INTEGER,mango_bar INTEGER,sub_total INTEGER,service_charge REAL,tax REAL,amount REAL)")
        conn.commit()
    def insert(bno,chocobar,strawberry,vanilla,butterscotch,kulfi,icecake,mintice,coneice,cupice,mangobar,subtotal,sc,tax,cost):
-       c.execute("INSERT INTO data(bill_no ,chocobar,strawberry,vanilla,butterscotch,kulfi,ice_cream_cake,mint_ice,cup_ice,cone_ice,mango_bar,sub_total,service_charge,tax,amount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",(bno,chocobar,strawberry,vanilla,butterscotch,kulfi,icecake,mintice,coneice,cupice,mangobar,subtotal,sc,tax,cost))
+       c.execute("INSERT INTO bdata(bill_no ,chocobar,strawberry,vanilla,butterscotch,kulfi,ice_cream_cake,mint_ice,cup_ice,cone_ice,mango_bar,sub_total,service_charge,tax,amount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",(bno,chocobar,strawberry,vanilla,butterscotch,kulfi,icecake,mintice,coneice,cupice,mangobar,subtotal,sc,tax,cost))
        conn.commit()
+   def bnogen():
+      b=random.randint(1000,10000)
+      return b
    def total():
-      try:
-       e11.configure(state='normal')
-       e11.configure(state='normal')
-       e11.configure(state='normal')
-       e11.configure(state='normal')
-       subtot=var1.get()*10+var2.get()*20+var3.get()*20+var4.get()*30+var5.get()*15+var6.get()*75+var7.get()*50+var8.get()*40+var9.get()*30+var10.get()*35
-       var11.set(subtot)
-       gst=round(var1.get()*10*0.05+var2.get()*20*0.05+var3.get()*2*0.050+var4.get()*3*0.050+var5.get()*15*0.05+var6.get()*75*0.05+var7.get()*50*0.05+var8.get()*40*0.05+var9.get()*30*0.05+var10.get()*35*0.05,2)
-       var13.set(gst)
-       sc=round(subtot*0.06,2)
-       var12.set(sc)
-       tot=subtot+gst+sc
-       t=round(tot,2)
-       var14.set(t)
-       e11.configure(state='disabled')
-       e11.configure(state='disabled')
-       e11.configure(state='disabled')
-       e11.configure(state='disabled')
-      except  Exception:
-        e11.configure(state='disabled')
-        reset()
-        messagebox.showinfo('Error','Enter only Integer data')        
+      if (var1.get()>0 or var2.get()>0 or var3.get()>0 or var4.get()>0 or var5.get()>0 or var6.get()>0 or  var7.get()>0 or var8.get()>0 or var9.get()>0 or var10.get()>0) :
+         try:
+          e11.configure(state='normal')
+          e11.configure(state='normal')
+          e11.configure(state='normal')
+          e11.configure(state='normal')
+          subtot=var1.get()*10+var2.get()*20+var3.get()*20+var4.get()*30+var5.get()*15+var6.get()*75+var7.get()*50+var8.get()*40+var9.get()*30+var10.get()*35
+          var11.set(subtot)
+          gst=round(var1.get()*10*0.05+var2.get()*20*0.05+var3.get()*2*0.050+var4.get()*3*0.050+var5.get()*15*0.05+var6.get()*75*0.05+var7.get()*50*0.05+var8.get()*40*0.05+var9.get()*30*0.05+var10.get()*35*0.05,2)
+          var13.set(gst)
+          sc=round(subtot*0.06,2)
+          var12.set(sc)
+          tot=subtot+gst+sc
+          t=round(tot,2)
+          var14.set(t)
+          e11.configure(state='disabled')
+          e11.configure(state='disabled')
+          e11.configure(state='disabled')
+          e11.configure(state='disabled')
+         except  Exception:
+           e11.configure(state='disabled')
+           reset()
+           messagebox.showinfo('Error','Enter only Integer data')
+      else:
+         messagebox.showinfo('Missing','Enter Quantity')
    def reciept():
-       global counter
-       bno=bnogen()
-       if counter :
-           txt.configure(state='normal')
-           txt.insert("1.0","\t A-Z IceCream \t \n ")
-           txt.insert(END,"------------------------------------------------\n")
-           txt.insert(END,"Bill no. \t \t" +str(bno)+"\n")
-           txt.insert(END,"------------------------------------------------\n")
-           txt.insert(END,"Item \t\tQty\tRate\n")
-           txt.insert(END,"------------------------------------------------\n")
-           txt.insert(END,"Chocobar \t \t" +str(var1.get())+"\t10 Rs/-\n \n")
-           txt.insert(END,"Strawberry \t \t" +str(var2.get())+"\t20 Rs/- \n  \n")
-           txt.insert(END,"Vanilla \t \t" +str(var3.get())+"\t20 Rs/- \n \n")
-           txt.insert(END,"Butterscotch\t \t" +str(var4.get())+" \t30 Rs/-\n \n")
-           txt.insert(END,"Kulfi \t \t" +str(var5.get())+"\t15 Rs/-\n \n")
-           txt.insert(END,"Ice cream cake \t \t" +str(var6.get()) +"\t75 Rs/-\n \n")
-           txt.insert(END,"Mint Ice cream \t \t" +str(var7.get())+"\t50 Rs/-\n \n")
-           txt.insert(END,"Cone ice \t \t" +str(var8.get())+"\t40 Rs/-\n \n")
-           txt.insert(END,"Cup ice \t \t" +str(var9.get())+"\t30 Rs/-\n \n")
-           txt.insert(END,"Mango bar \t \t" +str(var10.get())+"\t35 Rs/-\n \n")
-           txt.insert(END,"------------------------------------------------ \n \n")        
-           txt.insert(END,"Sub total \t \t" +str(var11.get())+"\n \n")
-           txt.insert(END,"GST \t \t" +str(var12.get())+"\n \n")
-           txt.insert(END,"Tax \t \t" +str(var13.get())+"\n \n")
-           txt.insert(END,"Total cost \t \t" +str(var14.get())+"\n \n")
-           txt.insert(END,"\n\tThank You, Visit Again \t")
-           txt.configure(state='disabled')
-           counter=0
-           y=messagebox.askyesno('Confirm','Do you want to save')
-           if y>0:
-              create_table()
-              chocobar=var1.get()
-              strawberry=var2.get()
-              vanilla=var3.get()
-              butterscotch=var4.get()
-              kulfi=var5.get()
-              icecake=var6.get()
-              mintice=var7.get()
-              coneice=var8.get()
-              cupice=var9.get()
-              mangobar=var10.get()
-              subtotal=var11.get()
-              sc=var12.get()
-              tax=var13.get()
-              cost=var14.get()
-              insert(bno,chocobar,strawberry,vanilla,butterscotch,kulfi,icecake,mintice,coneice,cupice,mangobar,subtotal,sc,tax,cost)
-              time.sleep(1)
-              messagebox.showinfo('Success','Successfully Saved')
-       else:
-           messagebox.showinfo("Warning",'Reset First')
+      if (var1.get()>0 or var2.get()>0 or var3.get()>0 or var4.get()>0 or var5.get()>0 or var6.get()>0 or  var7.get()>0 or var8.get()>0 or var9.get()>0 or var10.get()>0) and (var11.get()>0 and var12.get()>0 and var13.get()>0 and var14.get()>0) :
+          global counter
+          bno=bnogen()
+          if counter :
+              txt.configure(state='normal')
+              txt.insert("1.0","\t A-Z IceCream \t \n ")
+              txt.insert(END,"------------------------------------------------\n")
+              txt.insert(END,"Bill no. \t \t" +str(bno)+"\n")
+              txt.insert(END,"------------------------------------------------\n")
+              txt.insert(END,"Item \t\tQty\tRate\n")
+              txt.insert(END,"------------------------------------------------\n")
+              txt.insert(END,"Chocobar \t \t" +str(var1.get())+"\t10 Rs/-\n \n")
+              txt.insert(END,"Strawberry \t \t" +str(var2.get())+"\t20 Rs/- \n  \n")
+              txt.insert(END,"Vanilla \t \t" +str(var3.get())+"\t20 Rs/- \n \n")
+              txt.insert(END,"Butterscotch\t \t" +str(var4.get())+" \t30 Rs/-\n \n")
+              txt.insert(END,"Kulfi \t \t" +str(var5.get())+"\t15 Rs/-\n \n")
+              txt.insert(END,"Ice cream cake \t \t" +str(var6.get()) +"\t75 Rs/-\n \n")
+              txt.insert(END,"Mint Ice cream \t \t" +str(var7.get())+"\t50 Rs/-\n \n")
+              txt.insert(END,"Cone ice \t \t" +str(var8.get())+"\t40 Rs/-\n \n")
+              txt.insert(END,"Cup ice \t \t" +str(var9.get())+"\t30 Rs/-\n \n")
+              txt.insert(END,"Mango bar \t \t" +str(var10.get())+"\t35 Rs/-\n \n")
+              txt.insert(END,"------------------------------------------------ \n \n")        
+              txt.insert(END,"Sub total \t \t" +str(var11.get())+"\n \n")
+              txt.insert(END,"GST \t \t" +str(var12.get())+"\n \n")
+              txt.insert(END,"Tax \t \t" +str(var13.get())+"\n \n")
+              txt.insert(END,"Total cost \t \t" +str(var14.get())+"\n \n")
+              txt.insert(END,"\n\tThank You, Visit Again \t")
+              txt.configure(state='disabled')
+              counter=0
+              y=messagebox.askyesno('Confirm','Do you want to save')
+              if y>0:
+                 create_table()
+                 chocobar=var1.get()
+                 strawberry=var2.get()
+                 vanilla=var3.get()
+                 butterscotch=var4.get()
+                 kulfi=var5.get()
+                 icecake=var6.get()
+                 mintice=var7.get()
+                 coneice=var8.get()
+                 cupice=var9.get()
+                 mangobar=var10.get()
+                 subtotal=var11.get()
+                 sc=var12.get()
+                 tax=var13.get()
+                 cost=var14.get()
+                 insert(bno,chocobar,strawberry,vanilla,butterscotch,kulfi,icecake,mintice,coneice,cupice,mangobar,subtotal,sc,tax,cost)
+                 time.sleep(0.01)
+                 messagebox.showinfo('Success','Successfully Saved')
+          else:
+              messagebox.showinfo("Warning",'Reset First')
+      else:
+         messagebox.showerror('Error','Missing quantity or total')
    def goback():
+      reset()
       root.deiconify()
       billing.withdraw()
    def quit():
@@ -339,7 +347,7 @@ def getinfo():
        b=var15.get()
        txt.configure(state='normal')
        txt.delete('1.0',END)
-       c.execute('SELECT * FROM data where bill_no='+str(b))
+       c.execute('SELECT * FROM bdata where bill_no='+str(b))
        d=c.fetchall()
        if len(d)>0:       
           for i in d:
@@ -366,7 +374,7 @@ def getinfo():
               txt.insert(END,"Total cost \t \t \t" +str(i[14])+"\n \n")
               txt.configure(state='disabled')
        else:
-         messagebox.showinfo('Error','No such Bill number')            
+         messagebox.showerror('Error','No such Bill number')            
    def delete():
          txt.configure(state='normal')
          txt.delete('1.0',END)
@@ -375,9 +383,9 @@ def getinfo():
    def f1(event):
       find['bg']='cyan'
       find['image']=seimg
-      find['width']=210
-      find['height']=175
-      fi.place(x=77,y=65)
+      find['width']=215
+      find['height']=180
+      fi.place(x=80,y=67)
    def f2(event):     
       find['bg']="cyan2"
       find['text']='search'
@@ -388,9 +396,9 @@ def getinfo():
    def r1(event):
       reset['bg']='cyan'
       reset['image']=rimg
-      reset['width']=210
-      reset['height']=175
-      re.place(x=90,y=75)
+      reset['width']=215
+      reset['height']=180
+      re.place(x=90,y=80)
    def r2(event):     
       reset['bg']="cyan2"
       reset['text']='Reset'
@@ -401,8 +409,8 @@ def getinfo():
    def h1(event):
       home['bg']='cyan'
       home['image']=himg
-      home['width']=210
-      home['height']=175
+      home['width']=215
+      home['height']=180
       ho.place(x=90,y=65)
    def h2(event):     
       home['bg']="cyan2"
@@ -414,8 +422,8 @@ def getinfo():
    def e1(event):
       ex['bg']='cyan'
       ex['image']=qimg
-      ex['width']=210
-      ex['height']=175
+      ex['width']=215
+      ex['height']=180
       e.place(x=93,y=52)
    def e2(event):     
       ex['bg']="cyan2"
@@ -462,6 +470,42 @@ def exit():
    e=messagebox.askyesno('Exit','Do you want to exit')
    if e>0:
       root.destroy()
+def ug():
+      root.withdraw()
+      dox=Toplevel()
+      logo=PhotoImage(file='mlogo.png')
+      dox.geometry('280x440+0+0')
+      dox.title('User Guide')
+      def close():
+         root.deiconify()
+         dox.withdraw()
+      def license():
+         lic=Toplevel()
+         txt=Text(lic)
+         txt.insert(END,'Copyright (c) 2018 Marish Software Foundation. All Rights Reserved.')
+         txt.pack()
+         lic.mainloop()
+      def credits():
+         cre=Toplevel()
+         txt=Text(cre)
+         txt.insert(END,'Thanks to www.python-course.eu, tutorialspoint, and priyanka teacher for supporting ICBS development ')
+         txt.pack()
+         cre.mainloop()
+      txtbox=Text(dox,font=('georgia',20,'bold'),relief='ridge',bd=10,bg='white',height=10)
+      txtbox.image_create(END,image=logo)
+      txtbox.insert(END,'ICBS \n \n')
+      txtbox.configure(font=('georgia',10))
+      txtbox.insert(END,"Marish's Ice Cream Billing System\n\n")
+      txtbox.insert(END,'mail:marishwaran22@gmail.com\n\n')
+      txtbox.configure(state='disabled')
+      txtbox.pack()
+      b1=Button(dox,text='Close',font=('georgia',15),relief='groove',command=close)
+      b1.place(x=15,y=200)
+      b2=Button(dox,text='License',font=('georgia',15),relief='groove',command=license)
+      b2.place(x=90,y=200)
+      b3=Button(dox,text='Credits',font=('georgia',15),relief='groove',command=credits)
+      b3.place(x=185,y=200)
+      dox.mainloop()
 def billcolor1(event):
    billbtn['bg']="cyan"
    billbtn['image']=bimg
@@ -504,6 +548,7 @@ def excolor2(event):
    ex['height']=130
    l3.place(x=229,y=30)
    l3['bg']='cyan'
+img=PhotoImage(file='mlogo.png')
 top=Frame(root,width=1300,height=60,relief='ridge',bd=10)
 top.place(x=0,y=0)
 title=Label(top,font=("georgia",35,),text="                               ICE CREAM BILLING SYSTEM                         ",fg="blue")
@@ -512,6 +557,14 @@ top1=Frame(root,width=1200,height=60,relief='ridge',bd=8)
 top1.place(x=450,y=100)
 que=Label(top1,text="Which System you want to load ?",font=('georgia',20),fg='blue')
 que.pack()
+menubar=Menu(top1)
+root.config(menu=menubar)
+filemenu = Menu(menubar)
+filemenu.add_command(label="User Guide",command=ug )
+filemenu.add_separator()
+filemenu.add_command(label="About",)
+filemenu.add_separator()
+menubar.add_cascade(label='Help ',menu=filemenu)
 billbtn=Button(root,bg='cyan2',font=('georgia',15),cursor='hand2',text="Billing System",relief='ridge',bd=10,width=40,height=10,command=bills)
 billbtn.place(x=60,y=200)
 billbtn.bind('<Enter>',billcolor1)
